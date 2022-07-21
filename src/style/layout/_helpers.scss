@@ -1,0 +1,23 @@
+.margin-bottom{
+    margin-bottom: 28px;
+}
+.anime{
+    transition: all .3s ease-in-out;
+}
+
+.btn{
+    @extend .margin-bottom;
+    display: block;
+    appearance: none;
+	background: $primary;
+	border: none;
+	color: $light;
+	cursor: pointer;
+	font-size: rem(20px);
+	line-height: rem(30px);
+	padding: rem(14px) rem(16px) rem(12px);
+	text-align: center;
+	text-decoration: none;
+	font-family: $main-font;
+    width: 100%;
+}

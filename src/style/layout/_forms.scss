@@ -1,0 +1,81 @@
+form {
+  label {
+    &.hidden-label {
+      display: none !important;
+    }
+  }
+  &.login-form {
+    input {
+      margin: rem(6px) 0;
+      border: 1px solid #dddfe2;
+      color: #1d2129;
+      padding: rem(14px) rem(16px);
+    }
+    button {
+      @extend .anime;
+      background-color: #1877f2;
+      &:hover,
+      &:focus,
+      &:active {
+        background-color: #166fe5;
+      }
+    }
+  }
+  &.register-form {
+    input {
+      margin: rem(6px) 0;
+      border: 1px solid #dddfe2;
+      color: #1d2129;
+      padding: rem(14px) rem(16px);
+    }
+    .gender-radio {
+      font-size: rem(15px);
+      line-height: rem(36px);
+      border-radius: rem(4px);
+      border: 1px solid #ccd0d5;
+      padding: 0 rem(10px) 0 rem(10px);
+      display: flex;
+      flex-direction: row-reverse;
+      justify-content: space-between;
+      align-items: center;
+      input {
+        padding: 0;
+        border: 0;
+        margin: 0;
+        margin-left: rem(10px);
+      }
+    }
+  }
+  .password-field {
+    position: relative;
+    margin: rem(6px) 0;
+    border: 1px solid #dddfe2;
+    color: #1d2129;
+    border-radius: rem(5px);
+    padding: rem(14px) rem(16px);
+    input {
+      padding: 0;
+      border: 0;
+      margin: 0;
+      width: calc(100% - #{rem(28px + 20px)});
+    }
+    .pass-view-btn {
+      position: absolute;
+      top: 50%;
+      right: rem(12px);
+      transform: translateY(-50%);
+      font-size: rem(17px);
+      line-height: 1em;
+      cursor: pointer;
+      border-radius: 100%;
+      padding: rem(10px);
+      background-color: transparent;
+      @extend .anime;
+      &:hover,
+      &:focus,
+      &:active {
+        background-color: $medium;
+      }
+    }
+  }
+}
