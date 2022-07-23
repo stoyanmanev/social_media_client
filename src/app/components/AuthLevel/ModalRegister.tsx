@@ -6,6 +6,8 @@ interface Props {
 }
 
 const ModalRegister: React.FC<Props> = ({ closeModalHandler }) => {
+
+
   return (
     <div className="register-modal-container">
       <div className="modal-container">

@@ -1,14 +1,37 @@
-import 'bootstrap/dist/css/bootstrap.min.css';
-import '../style/styles.scss';
+import 'react-toastify/dist/ReactToastify.css';
+import "bootstrap/dist/css/bootstrap.min.css";
+import 'font-awesome/css/font-awesome.min.css';
+import "../style/styles.scss";
 
-import { Provider } from 'react-redux'
-import type { AppProps } from 'next/app'
-import store from '../app/store'
+import React from "react";
+import { Provider } from "react-redux";
+import type { AppProps } from "next/app";
+import { QueryClient, QueryClientProvider, Hydrate } from "react-query";
+import store from "../app/store";
+import { ToastContainer } from "react-toastify";
 
 export default function MyApp({ Component, pageProps }: AppProps) {
+  const [queryClient] = React.useState(() => new QueryClient());
+
+
   return (
     <Provider store={store}>
-      <Component {...pageProps} />
+      <QueryClientProvider client={queryClient}>
+        <Hydrate state={pageProps.dehydratedState}>
+          <Component {...pageProps} />
+        </Hydrate>
+      <ToastContainer
+        position="bottom-left"
+        autoClose={8000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
+      </QueryClientProvider>
     </Provider>
-  )
+  );
 }

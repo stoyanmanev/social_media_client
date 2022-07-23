@@ -1,0 +1,89 @@
+query Users{
+  users{
+    _id,
+    name,
+    family,
+    email,
+    password,
+    dob,
+    gender,
+    lastLogin
+  }
+}
+
+query User($id: String!){
+  user(_id: $id){
+    _id,
+    name,
+    family,
+    email,
+    password,
+    dob,
+    gender,
+    lastLogin
+  }
+}
+
+query currentUser{
+  currentUser{
+    _id,
+    name,
+    family,
+    email,
+    password,
+    dob,
+    gender,
+    lastLogin
+  }
+}
+
+mutation CreateUser($data: CreateUserInput!){
+  createUser(data: $data) {
+    _id,
+    name,
+    family,
+    email,
+    password,
+    dob,
+    gender,
+    lastLogin
+  }
+}
+
+mutation DeleteUser($id: String!){
+  deleteUser(_id: $id) {
+    _id,
+    name,
+    family,
+    email,
+    password,
+    dob,
+    gender,
+    lastLogin
+  }
+}
+
+
+mutation EditUser($id: String!, $data: EditUserInput!){
+  editUser(_id: $id, data: $data) {
+    _id,
+    name,
+    family,
+    email,
+    password,
+    dob,
+    gender,
+    lastLogin
+  }
+}
+
+
+mutation Login($email: String!, $password: String!){
+    login(email: $email, password: $password)
+}
+
+mutation Logout{
+    logout{
+      _id
+    }
+}

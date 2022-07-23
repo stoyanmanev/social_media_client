@@ -3,18 +3,46 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { FormEvent, useState } from "react";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
+import { useCookies } from "react-cookie";
+import { toast } from "react-toastify";
+import { useLoginMutation } from "../../../../generated/graphql";
 
 const LoginForm: React.FC = () => {
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
   const [visiblePass, setVisiblePass] = useState(false);
+  const [cookie, setCookie] = useCookies(["token"]);
+
+  const {mutate} = useLoginMutation({
+    onSuccess: async (data) => {
+      console.log(data);
+      await setCookie("token", data.login, {
+        path: "/",
+        maxAge: 360000,
+        sameSite: true,
+      });
+    },
+    onError: (err: any) => {
+      const errorMsg = String(err).split(":")[1];
+      toast.error(`${errorMsg}`);
+    }
+  })
 
   const isNotEmptyFields = email !== "" && pass !== "";
 
   const submitHandler = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if(isNotEmptyFields) return false;
-    console.log(email, pass);
+    if(!isNotEmptyFields) {
+      if(!email) return toast.error(`Полето Имейл е задължително`);
+      if(!pass) return toast.error(`Полето Парола е задължително`);
+    }else{
+      if(pass.length < 6) return toast.error(`Минималната дължина на паролата не е изпълнена`);
+    }
+
+    mutate({
+      email,
+      password: pass
+    })
   };
 
   return (
