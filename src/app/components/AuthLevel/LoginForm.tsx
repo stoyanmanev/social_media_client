@@ -15,7 +15,6 @@ const LoginForm: React.FC = () => {
 
   const {mutate} = useLoginMutation({
     onSuccess: async (data) => {
-      console.log(data);
       await setCookie("token", data.login, {
         path: "/",
         maxAge: 360000,
