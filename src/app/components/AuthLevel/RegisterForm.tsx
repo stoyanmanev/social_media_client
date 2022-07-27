@@ -2,8 +2,14 @@ import { FormEvent, useState } from "react";
 import { Button, Col, Row, Form } from "react-bootstrap";
 import { faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useCreateUserMutation } from "../../../../generated/graphql";
+import { toast } from "react-toastify";
 
-const RegisterForm: React.FC = () => {
+interface Props {
+  closeModalHandler: (type: boolean) => void;
+}
+
+const RegisterForm: React.FC<Props> = ({closeModalHandler}) => {
   const [personalName, setPersonalName] = useState("");
   const [familyName, setFamilyName] = useState("");
   const [email, setEmail] = useState("");
@@ -11,6 +17,19 @@ const RegisterForm: React.FC = () => {
   const [dob, setDOB] = useState("");
   const [gender, setGender] = useState("");
   const [visiblePass, setVisiblePass] = useState(false);
+
+  const { mutate } = useCreateUserMutation({
+    onSuccess: async (data) => {
+      if(data.createUser){
+        toast.info(`Профила е създаден успешно!`);
+        closeModalHandler(false);
+      }
+    },
+    onError: (err: any) => {
+      const errorMsg = String(err).split(":")[1];
+      toast.error(`${errorMsg}`);
+    },
+  });
 
   const isNotEmptyFields =
     personalName !== "" &&
@@ -22,8 +41,17 @@ const RegisterForm: React.FC = () => {
 
   const submitHandler = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if(isNotEmptyFields) return false;
-    console.log(personalName, familyName, email, pass, gender, dob);
+    if (!isNotEmptyFields) return false;
+    mutate({
+      data: {
+        name: personalName,
+        family: familyName,
+        email: email,
+        password: pass,
+        dob: dob,
+        gender,
+      },
+    });
   };
 
   return (

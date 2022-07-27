@@ -7,41 +7,47 @@ import { useCookies } from "react-cookie";
 import { toast } from "react-toastify";
 import { useLoginMutation } from "../../../../generated/graphql";
 
-const LoginForm: React.FC = () => {
+interface Props {
+  refetch: () => void;
+}
+
+const LoginForm: React.FC<Props> = ({ refetch }) => {
   const [email, setEmail] = useState("");
   const [pass, setPass] = useState("");
   const [visiblePass, setVisiblePass] = useState(false);
   const [cookie, setCookie] = useCookies(["token"]);
 
-  const {mutate} = useLoginMutation({
+  const { mutate } = useLoginMutation({
     onSuccess: async (data) => {
       await setCookie("token", data.login, {
         path: "/",
         maxAge: 360000,
         sameSite: true,
       });
+      refetch()
     },
     onError: (err: any) => {
       const errorMsg = String(err).split(":")[1];
       toast.error(`${errorMsg}`);
-    }
-  })
+    },
+  });
 
   const isNotEmptyFields = email !== "" && pass !== "";
 
   const submitHandler = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if(!isNotEmptyFields) {
-      if(!email) return toast.error(`Полето Имейл е задължително`);
-      if(!pass) return toast.error(`Полето Парола е задължително`);
-    }else{
-      if(pass.length < 6) return toast.error(`Минималната дължина на паролата не е изпълнена`);
+    if (!isNotEmptyFields) {
+      if (!email) return toast.error(`Полето Имейл е задължително`);
+      if (!pass) return toast.error(`Полето Парола е задължително`);
+    } else {
+      if (pass.length < 6)
+        return toast.error(`Минималната дължина на паролата не е изпълнена`);
     }
 
     mutate({
       email,
-      password: pass
-    })
+      password: pass,
+    });
   };
 
   return (

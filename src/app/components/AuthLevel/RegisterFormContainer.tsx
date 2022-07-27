@@ -12,7 +12,7 @@ const RegisterFormContainer: React.FC<Props> = ({ closeModalHandler }) => {
       <div className="title">
         <h2>Регистрация <span>Бързо и лесно е</span></h2>
       </div>
-      <RegisterForm />
+      <RegisterForm closeModalHandler={closeModalHandler}/>
       <div className="close">
         <FontAwesomeIcon
           icon={faXmark}

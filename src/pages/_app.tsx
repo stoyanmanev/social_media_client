@@ -21,7 +21,7 @@ export default function MyApp({ Component, pageProps }: AppProps) {
           <Component {...pageProps} />
         </Hydrate>
       <ToastContainer
-        position="bottom-left"
+        position="top-center"
         autoClose={8000}
         hideProgressBar={false}
         newestOnTop={false}

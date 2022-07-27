@@ -5,7 +5,11 @@ import ForgottenPassword from "./ForgottenPassword";
 import LoginForm from "./LoginForm";
 import ModalRegister from "./ModalRegister";
 
-const NotAuthContainer: React.FC = () => {
+interface Props{
+  refetch: () => void;
+}
+
+const NotAuthContainer: React.FC<Props> = ({refetch}) => {
   const [isViewRegisterForm, setIsViewRegisterForm] = useState(false);
   const [isViewForgotenPassForm, setIsViewForgotenPassForm] = useState(false);
 
@@ -25,7 +29,7 @@ const NotAuthContainer: React.FC = () => {
             </Col>
             <Col lg={6}>
               <div className="acount-controller">
-                <LoginForm />
+                <LoginForm refetch={refetch} />
                 <div className="forgotten-password-container">
                   <span onClick={() => setIsViewForgotenPassForm(true)}>Забравена парола?</span>
                 </div>
