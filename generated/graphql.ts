@@ -31,10 +31,10 @@ export type CreateUserInput = {
 };
 
 export type EditUserInput = {
-  dob: Scalars['String'];
+  dob?: InputMaybe<Scalars['String']>;
   email?: InputMaybe<Scalars['String']>;
   family?: InputMaybe<Scalars['String']>;
-  gender: Scalars['String'];
+  gender?: InputMaybe<Scalars['String']>;
   name?: InputMaybe<Scalars['String']>;
   password?: InputMaybe<Scalars['String']>;
 };

@@ -7,37 +7,39 @@ import { FormEvent, useEffect, useState } from "react";
 
 interface Props {
   closeModalHandler: (type: boolean) => void;
+  setIsNewPasswordView: (type: string) => void;
+  setIsCodeResetView:(type: Email | undefined) => void;
   codeData: Email;
 }
 
 const GeneratedCodeForm: React.FC<Props> = ({
   closeModalHandler,
+  setIsNewPasswordView,
+  setIsCodeResetView,
   codeData,
 }) => {
-
   const [inputCode, setInputCode] = useState("");
+  const [errorMsg, setErrorMsg] = useState(false);
   const [isWrongCode, setIsWrongCode] = useState<boolean>(false);
 
-  console.log(codeData.code);
-
   useEffect(() => {
-      const timeout = setTimeout(() => {
-        console.log('end timeout')
-        clearTimeout(timeout)
-        return userCloseModal()
-      }, 10000)
-  },[])
+    const timeout = setTimeout(() => {
+      setErrorMsg(true);
+      clearTimeout(timeout)
+    }, codeData.avaiblleTime);
+  }, []);
 
   const userCloseModal = () => {
-    if(inputCode !== codeData.code) closeModalHandler(false);
+    if (inputCode !== codeData.code) closeModalHandler(false);
   };
 
   const submitHandler = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
+    if(errorMsg) return false;
     if (inputCode === codeData.code) {
-        setIsWrongCode(false);
-      console.log("reset password");
+      setIsWrongCode(false);
+      setIsCodeResetView(undefined)
+      setIsNewPasswordView(codeData.email)
     } else {
       setInputCode("");
       setIsWrongCode(true);
@@ -49,30 +51,49 @@ const GeneratedCodeForm: React.FC<Props> = ({
       <div className="title">
         <h3>Въведете получения от имейла си код</h3>
       </div>
+      
       <Form className="login-form" onSubmit={(e) => submitHandler(e)}>
         <Form.Group className="mb-3" controlId="formBasicEmail">
           <Form.Label className="hidden-label">
             Въведете получения код
           </Form.Label>
-          <Form.Control
+          {!errorMsg && <Form.Control
             type="text"
             placeholder={`${isWrongCode ? "Въведения код е грешен" : "Код"}`}
             value={inputCode}
             onChange={(e) => setInputCode(e.target.value)}
-          />
+          />}
+          {errorMsg && <Form.Control
+            type="text"
+            placeholder={`${isWrongCode ? "Въведения код е грешен" : "Код"}`}
+            value={inputCode}
+            onChange={(e) => setInputCode(e.target.value)}
+            disabled
+          />}
         </Form.Group>
         <Button variant="primary" type="submit">
           Изпрати
         </Button>
       </Form>
       <div className="modal-info">
-        <p>
-          Изпратихме имейл на посочения адрес. Моля въведете кода от имейла!
-        </p>
-        <p>
-          Кода ще бъде активен само 2 минути, като след това това съобщения ще
-          се затвори автоматично.
-        </p>
+        {!errorMsg && (
+          <div>
+            <p>
+              Изпратихме имейл на посочения адрес. Моля въведете кода от имейла!
+            </p>
+            <p>
+              Кода ще бъде активен само 2 минути, като след това това съобщения
+              ще се затвори автоматично.
+            </p>
+          </div>
+        )}
+        {errorMsg && (
+          <div className="alert-msg">
+            <p>
+              Времето изтече. Моля опитайте отново.
+            </p>
+          </div>
+        )}
       </div>
       <div className="close">
         <FontAwesomeIcon

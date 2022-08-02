@@ -8,9 +8,10 @@ import Email from "../../../interfaces/forgottEmail";
 interface Props {
   closeModalHandler: (type: boolean) => void;
   setIsCodeResetView: (type: object) => void;
+  setUserList: (type: Array<User>) => void;
 }
 
-const ForgottenForm: React.FC<Props> = ({ closeModalHandler, setIsCodeResetView }) => {
+const ForgottenForm: React.FC<Props> = ({ closeModalHandler, setIsCodeResetView, setUserList }) => {
   const [email, setEmail] = useState("");
   const usersList: any = useUsersQuery<any>({}, { refetchOnWindowFocus: true });
 
@@ -26,7 +27,7 @@ const ForgottenForm: React.FC<Props> = ({ closeModalHandler, setIsCodeResetView 
     const sendingEmail: Email | any = await sendEmail(email)
 
     if(sendingEmail?.send) {
-      return setIsCodeResetView({code: sendingEmail.code, avaiblleTime: sendingEmail.avaiblleTime});
+      return setIsCodeResetView({email, code: sendingEmail.code, avaiblleTime: sendingEmail.avaiblleTime});
     }
     return toast.info("Неуспяхме да изпратим имейл към посочения адрес! Моля свържете се с на placeholder@socialmedia.com");
   }
@@ -41,7 +42,7 @@ const ForgottenForm: React.FC<Props> = ({ closeModalHandler, setIsCodeResetView 
     if (email === "") return false;
     const fetchResults: {users : Array<User>} | undefined = usersList.data;
     const isEmailExist: Array<User> = fetchResults.users.filter(user => user.email === email);
-
+    setUserList(isEmailExist);
     if(isEmailExist.length > 0) return existingEmail();
     return notExistingEmail();
   };
